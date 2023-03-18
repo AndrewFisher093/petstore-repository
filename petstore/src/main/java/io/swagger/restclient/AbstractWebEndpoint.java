@@ -6,11 +6,15 @@ import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.mapper.ObjectMapperType;
 import io.restassured.response.ValidatableResponse;
 import io.restassured.specification.RequestSpecification;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * The AbstractWebEndpoint describes Http methods to execute for specific endpoint.
  */
 public class AbstractWebEndpoint {
+
+    protected static final Logger LOGGER = LogManager.getLogger();
 
     /**
      * Post validatable response.
@@ -23,6 +27,8 @@ public class AbstractWebEndpoint {
      */
     public ValidatableResponse post(RequestSpecification reqSpec, String path, Object bodyPayload,
         Object... pathParams) {
+        LOGGER.debug("Send POST request to url [{}]", path);
+
         RequestSpecBuilder specBuilder = new RequestSpecBuilder();
         specBuilder.addRequestSpecification(reqSpec);
 
