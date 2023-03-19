@@ -158,6 +158,11 @@ public class PetDto {
             return this;
         }
 
+        /**
+         * Build pet dto.
+         *
+         * @return the pet dto
+         */
         public PetDto build() {
             PetDto petDto = new PetDto();
             petDto.setId(id);
