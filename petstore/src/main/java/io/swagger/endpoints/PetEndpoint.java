@@ -89,6 +89,19 @@ public class PetEndpoint extends AbstractWebEndpoint {
         return get(requestSpecification, PET_ENDPOINT + FIND_BY_STATUS).statusCode(status.getCode());
     }
 
+    /**
+     * Delete pet by id.
+     *
+     * @param petId the pet id
+     * @param status the status
+     * @return the validatable response
+     */
+    public ValidatableResponse deletePetById(Integer petId, HttpStatus status) {
+        var requestSpecification = buildRequestSpecification(ContentType.JSON, new HashMap<>());
+
+        return delete(requestSpecification, PET_ENDPOINT + PET_ID, petId).statusCode(status.getCode());
+    }
+
     private RequestSpecification buildRequestSpecification(ContentType contentType, Map<String, String> headers) {
         return new RequestSpecBuilder()
             .log(LogDetail.ALL)
