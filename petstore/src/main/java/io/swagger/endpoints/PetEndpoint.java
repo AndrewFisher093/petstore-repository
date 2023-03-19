@@ -1,5 +1,6 @@
 package io.swagger.endpoints;
 
+import io.qameta.allure.restassured.AllureRestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.filter.log.LogDetail;
 import io.restassured.http.ContentType;
@@ -106,6 +107,7 @@ public class PetEndpoint extends AbstractWebEndpoint {
         return new RequestSpecBuilder()
             .log(LogDetail.ALL)
             .setContentType(contentType)
+            .addFilter(new AllureRestAssured())
             .addHeaders(headers)
             .build();
     }
