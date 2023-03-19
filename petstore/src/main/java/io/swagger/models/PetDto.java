@@ -13,13 +13,13 @@ public class PetDto {
     @JsonProperty(value = "id", access = JsonProperty.Access.READ_WRITE)
     private Integer id;
     @JsonProperty(value = "category", access = JsonProperty.Access.READ_WRITE)
-    private CategoryDto category;
+    private CategoryTagDto category;
     @JsonProperty(value = "name", access = JsonProperty.Access.READ_WRITE)
     private String name;
     @JsonProperty(value = "photoUrls", access = JsonProperty.Access.READ_WRITE)
     private List<String> photoUrls;
     @JsonProperty(value = "tags", access = JsonProperty.Access.READ_WRITE)
-    private List<TagsDto> tags;
+    private List<CategoryTagDto> tags;
     @JsonProperty(value = "status", access = JsonProperty.Access.READ_WRITE)
     private String status;
 
@@ -32,11 +32,11 @@ public class PetDto {
         return this;
     }
 
-    public CategoryDto getCategory() {
+    public CategoryTagDto getCategory() {
         return category;
     }
 
-    public PetDto setCategory(CategoryDto category) {
+    public PetDto setCategory(CategoryTagDto category) {
         this.category = category;
         return this;
     }
@@ -59,11 +59,11 @@ public class PetDto {
         return this;
     }
 
-    public List<TagsDto> getTags() {
+    public List<CategoryTagDto> getTags() {
         return tags;
     }
 
-    public PetDto setTags(List<TagsDto> tags) {
+    public PetDto setTags(List<CategoryTagDto> tags) {
         this.tags = tags;
         return this;
     }
@@ -97,8 +97,7 @@ public class PetDto {
     @Override
     public int hashCode() {
         return new HashCodeBuilder(17, 37).append(id).append(category)
-            .append(name).append(photoUrls).append(tags)
-            .append(status).toHashCode();
+            .append(name).append(photoUrls).append(tags).append(status).toHashCode();
     }
 
     @Override
@@ -111,5 +110,63 @@ public class PetDto {
             .append("tags", tags)
             .append("status", status)
             .toString();
+    }
+
+    public static final class Builder {
+
+        private Integer id;
+        private CategoryTagDto category;
+        private String name;
+        private List<String> photoUrls;
+        private List<CategoryTagDto> tags;
+        private String status;
+
+        private Builder() {
+        }
+
+        public static Builder newBuilder() {
+            return new Builder();
+        }
+
+        public Builder withId(Integer id) {
+            this.id = id;
+            return this;
+        }
+
+        public Builder withCategory(CategoryTagDto category) {
+            this.category = category;
+            return this;
+        }
+
+        public Builder withName(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public Builder withPhotoUrls(List<String> photoUrls) {
+            this.photoUrls = photoUrls;
+            return this;
+        }
+
+        public Builder withTags(List<CategoryTagDto> tags) {
+            this.tags = tags;
+            return this;
+        }
+
+        public Builder withStatus(String status) {
+            this.status = status;
+            return this;
+        }
+
+        public PetDto build() {
+            PetDto petDto = new PetDto();
+            petDto.setId(id);
+            petDto.setCategory(category);
+            petDto.setName(name);
+            petDto.setPhotoUrls(photoUrls);
+            petDto.setTags(tags);
+            petDto.setStatus(status);
+            return petDto;
+        }
     }
 }
