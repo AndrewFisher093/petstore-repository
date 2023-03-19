@@ -22,7 +22,7 @@ public class AbstractWebEndpoint {
     }
 
     /**
-     * Post validatable response.
+     * Execute POST request.
      *
      * @param reqSpec the request specification
      * @param path the path
@@ -44,6 +44,23 @@ public class AbstractWebEndpoint {
             .spec(specBuilder.build())
             .when()
             .post(path, pathParams)
+            .then();
+    }
+
+    /**
+     * Execute GET request.
+     *
+     * @param requestSpecification the request specification
+     * @param path the path
+     * @param params the params
+     * @return the validatable response
+     */
+    public ValidatableResponse get(RequestSpecification requestSpecification, String path, Object... params) {
+        LOGGER.debug("Send GET request to url [{}]", path);
+        return given()
+            .spec(requestSpecification)
+            .when()
+            .get(path, params)
             .then();
     }
 
