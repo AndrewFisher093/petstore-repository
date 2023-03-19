@@ -1,4 +1,4 @@
-package io.swagger.restclient;
+package io.swagger.endpoints;
 
 import static io.restassured.RestAssured.given;
 
@@ -6,6 +6,7 @@ import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.mapper.ObjectMapperType;
 import io.restassured.response.ValidatableResponse;
 import io.restassured.specification.RequestSpecification;
+import io.swagger.restclient.RestAssuredConfiguration;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -15,6 +16,10 @@ import org.apache.logging.log4j.Logger;
 public class AbstractWebEndpoint {
 
     protected static final Logger LOGGER = LogManager.getLogger();
+
+    public AbstractWebEndpoint() {
+        RestAssuredConfiguration.instance();
+    }
 
     /**
      * Post validatable response.

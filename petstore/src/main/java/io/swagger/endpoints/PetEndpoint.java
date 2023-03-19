@@ -1,10 +1,14 @@
-package io.swagger.restclient;
+package io.swagger.endpoints;
 
 import io.restassured.builder.RequestSpecBuilder;
+import io.restassured.filter.log.LogDetail;
+import io.restassured.http.ContentType;
 import io.restassured.response.ValidatableResponse;
 import io.restassured.specification.RequestSpecification;
 import io.swagger.helpers.HttpStatus;
 import io.swagger.models.PetDto;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * The PetEndpoint describes manipulation with Pet entity.
@@ -32,8 +36,16 @@ public class PetEndpoint extends AbstractWebEndpoint {
      * @return the validatable response
      */
     public ValidatableResponse createPet(PetDto pet, HttpStatus status) {
-        RequestSpecification requestSpecification = new RequestSpecBuilder().build();
+        RequestSpecification requestSpecification = buildRequestSpecification(ContentType.JSON, new HashMap<>());
 
         return post(requestSpecification, PET_ENDPOINT, pet).statusCode(status.getCode());
+    }
+
+    private RequestSpecification buildRequestSpecification(ContentType contentType, Map<String, String> headers) {
+        return new RequestSpecBuilder()
+            .log(LogDetail.ALL)
+            .setContentType(contentType)
+            .addHeaders(headers)
+            .build();
     }
 }
