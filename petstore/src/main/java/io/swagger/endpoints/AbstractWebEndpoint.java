@@ -50,17 +50,36 @@ public class AbstractWebEndpoint {
     /**
      * Execute GET request.
      *
-     * @param requestSpecification the request specification
+     * @param reqSpec the request specification
      * @param path the path
      * @param params the params
      * @return the validatable response
      */
-    public ValidatableResponse get(RequestSpecification requestSpecification, String path, Object... params) {
+    public ValidatableResponse get(RequestSpecification reqSpec, String path, Object... params) {
         LOGGER.debug("Send GET request to url [{}]", path);
+
         return given()
-            .spec(requestSpecification)
+            .spec(reqSpec)
             .when()
             .get(path, params)
+            .then();
+    }
+
+    /**
+     * Execute DELETE request.
+     *
+     * @param reqSpec the request specification
+     * @param path the path
+     * @param params the params
+     * @return the validatable response
+     */
+    public ValidatableResponse delete(RequestSpecification reqSpec, String path, Object... params) {
+        LOGGER.debug("Send DELETE request to url [{}]", path);
+
+        return given()
+            .spec(reqSpec)
+            .when()
+            .delete(path, params)
             .then();
     }
 
