@@ -9,20 +9,32 @@ import io.swagger.helpers.HttpStatus;
 import io.swagger.helpers.PetStatus;
 import io.swagger.models.PetDto;
 import java.util.stream.Collectors;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Tags;
 import org.junit.jupiter.api.Test;
 
 @Feature("API: Pet endpoint")
-public class PetTests extends BasePetstoreTests {
+public class PetTests {
+
+    private PetGenerator petGenerator;
+
+    @BeforeEach
+    public void initHelpers() {
+        petGenerator = new PetGenerator();
+    }
+
+    @AfterEach
+    public void cleanupTestData() {
+        petGenerator.getEndpointExecutor().cleanPets();
+    }
 
     @Test
     @DisplayName("Verify ability to create a new pet")
     @Tags(value = {@Tag("pets"), @Tag("regression")})
     public void testCreatePet() {
-        var petGenerator = new PetGenerator();
-
         var savedPet = petGenerator
             .getPetBuilder()
             .buildDefaultPet()
@@ -37,8 +49,6 @@ public class PetTests extends BasePetstoreTests {
     @DisplayName("Verify ability to retrieve pet")
     @Tags(value = {@Tag("pets"), @Tag("regression")})
     public void testRetrievePet() {
-        var petGenerator = new PetGenerator();
-
         var savedPet = petGenerator
             .getPetBuilder()
             .buildDefaultPet()
@@ -46,7 +56,6 @@ public class PetTests extends BasePetstoreTests {
             .createPet();
 
         var retrievedPet = petGenerator
-            .getPetBuilder()
             .getEndpointExecutor()
             .getPetById(savedPet.getId());
 
@@ -58,8 +67,6 @@ public class PetTests extends BasePetstoreTests {
     @DisplayName("Verify ability to retrieve pets by status")
     @Tags(value = {@Tag("pets"), @Tag("regression")})
     public void testRetrievePetsByStatus() {
-        var petGenerator = new PetGenerator();
-
         var savedPet = petGenerator
             .getPetBuilder()
             .buildDefaultPet()
@@ -67,7 +74,6 @@ public class PetTests extends BasePetstoreTests {
             .createPet();
 
         var listOfPetsWithAvailableStatus = petGenerator
-            .getPetBuilder()
             .getEndpointExecutor()
             .getPetByStatus(savedPet.getStatus());
 
@@ -82,8 +88,6 @@ public class PetTests extends BasePetstoreTests {
     @DisplayName("Verify ability to delete pet")
     @Tags(value = {@Tag("pets"), @Tag("regression")})
     public void testDeletePet() {
-        var petGenerator = new PetGenerator();
-
         var savedPet = petGenerator
             .getPetBuilder()
             .buildDefaultPet()
@@ -91,12 +95,10 @@ public class PetTests extends BasePetstoreTests {
             .createPet();
 
         petGenerator
-            .getPetBuilder()
             .getEndpointExecutor()
             .deletePetById(savedPet.getId(), HttpStatus.OK);
 
         petGenerator
-            .getPetBuilder()
             .getEndpointExecutor()
             .deletePetById(savedPet.getId(), HttpStatus.NOT_FOUND);
     }
@@ -105,8 +107,6 @@ public class PetTests extends BasePetstoreTests {
     @DisplayName("Verify ability to update pet")
     @Tags(value = {@Tag("pets"), @Tag("regression")})
     public void testUpdatePet() {
-        var petGenerator = new PetGenerator();
-
         var savedPet = petGenerator
             .getPetBuilder()
             .buildDefaultPet()
@@ -123,7 +123,6 @@ public class PetTests extends BasePetstoreTests {
             .build();
 
         petGenerator
-            .getPetBuilder()
             .getEndpointExecutor()
             .updatePet(updatedPet);
 

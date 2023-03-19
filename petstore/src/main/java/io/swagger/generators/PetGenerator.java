@@ -4,6 +4,7 @@ import com.github.javafaker.Faker;
 import io.qameta.allure.Step;
 import io.restassured.response.ValidatableResponse;
 import io.swagger.endpoints.PetEndpoint;
+import io.swagger.helpers.History;
 import io.swagger.helpers.HttpStatus;
 import io.swagger.helpers.PetStatus;
 import io.swagger.models.CategoryTagDto;
@@ -16,14 +17,25 @@ import java.util.List;
  */
 public class PetGenerator {
 
+    private final EndpointExecutor endpointExecutor;
+    private final PetBuilder petBuilder;
     private PetDto petDto;
+
+    public PetGenerator() {
+        this.endpointExecutor = new EndpointExecutor(this);
+        this.petBuilder = new PetBuilder(this);
+    }
 
     public PetDto getPetDto() {
         return petDto;
     }
 
     public PetBuilder getPetBuilder() {
-        return new PetBuilder(this);
+        return this.petBuilder;
+    }
+
+    public EndpointExecutor getEndpointExecutor() {
+        return this.endpointExecutor;
     }
 
     /**
@@ -44,7 +56,7 @@ public class PetGenerator {
          *
          * @return the pet builder
          */
-        public PetBuilder buildDefaultPet() {
+        public PetGenerator buildDefaultPet() {
             this.petGenerator.petDto = PetDto.Builder.newBuilder()
                 .withId(faker.number().randomNumber())
                 .withName(faker.name().name())
@@ -56,16 +68,7 @@ public class PetGenerator {
                 .withStatus(PetStatus.AVAILABLE.getStatus())
                 .build();
 
-            return this;
-        }
-
-        /**
-         * Gets endpoint executor.
-         *
-         * @return the endpoint executor
-         */
-        public EndpointExecutor getEndpointExecutor() {
-            return new EndpointExecutor(this.petGenerator);
+            return petGenerator;
         }
     }
 
@@ -75,10 +78,12 @@ public class PetGenerator {
     public static class EndpointExecutor {
 
         private final PetEndpoint petEndpoint;
-        private final PetDto pet;
+        private final History<Long> petsHistory;
+        private final PetGenerator petGenerator;
 
         public EndpointExecutor(PetGenerator petGenerator) {
-            this.pet = petGenerator.getPetDto();
+            this.petGenerator = petGenerator;
+            this.petsHistory = new History<>();
             this.petEndpoint = new PetEndpoint();
         }
 
@@ -89,7 +94,9 @@ public class PetGenerator {
          */
         @Step("Execute creation of the Pet")
         public PetDto createPet() {
-            return this.petEndpoint.createPet(this.pet);
+            var createdPet = this.petEndpoint.createPet(this.petGenerator.getPetDto());
+            this.petsHistory.add(createdPet.getId());
+            return createdPet;
         }
 
         /**
@@ -135,6 +142,13 @@ public class PetGenerator {
         @Step("Execute update of the Pet")
         public PetDto updatePet(PetDto petDto) {
             return this.petEndpoint.updatePet(petDto);
+        }
+
+        /**
+         * Clean all pets if after tests.
+         */
+        public void cleanPets() {
+            this.petsHistory.clear(this.petEndpoint::deletePetById);
         }
     }
 }
