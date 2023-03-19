@@ -3,12 +3,14 @@ package io.swagger.endpoints;
 import io.qameta.allure.restassured.AllureRestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.filter.log.LogDetail;
+import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.http.ContentType;
 import io.restassured.response.ValidatableResponse;
 import io.restassured.specification.RequestSpecification;
 import io.swagger.helpers.HttpStatus;
 import io.swagger.models.PetDto;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -49,7 +51,7 @@ public class PetEndpoint extends AbstractWebEndpoint {
      * @param petId the pet id
      * @return the pet by id
      */
-    public PetDto getPetById(Integer petId) {
+    public PetDto getPetById(Long petId) {
         return extractObjectAsDto(getPetById(petId, HttpStatus.OK), PetDto.class);
     }
 
@@ -60,20 +62,20 @@ public class PetEndpoint extends AbstractWebEndpoint {
      * @param status the status
      * @return the pet by id
      */
-    public ValidatableResponse getPetById(Integer petId, HttpStatus status) {
+    public ValidatableResponse getPetById(Long petId, HttpStatus status) {
         var requestSpecification = buildRequestSpecification(ContentType.JSON, new HashMap<>());
 
         return get(requestSpecification, PET_ENDPOINT + PET_ID, petId).statusCode(status.getCode());
     }
 
     /**
-     * Get pet by status.
+     * Get pets by status.
      *
      * @param petStatus the pet status
      * @return the pet by status
      */
-    public PetDto getPetByStatus(String petStatus) {
-        return extractObjectAsDto(getPetByStatus(petStatus, HttpStatus.OK), PetDto.class);
+    public List<PetDto> getPetByStatus(String petStatus) {
+        return extractObjectsAsDtoList(getPetByStatus(petStatus, HttpStatus.OK), PetDto.class);
     }
 
     /**
@@ -97,10 +99,33 @@ public class PetEndpoint extends AbstractWebEndpoint {
      * @param status the status
      * @return the validatable response
      */
-    public ValidatableResponse deletePetById(Integer petId, HttpStatus status) {
+    public ValidatableResponse deletePetById(Long petId, HttpStatus status) {
         var requestSpecification = buildRequestSpecification(ContentType.JSON, new HashMap<>());
 
         return delete(requestSpecification, PET_ENDPOINT + PET_ID, petId).statusCode(status.getCode());
+    }
+
+    /**
+     * Update pet.
+     *
+     * @param pet the pet
+     * @return the pet dto
+     */
+    public PetDto updatePet(PetDto pet) {
+        return extractObjectAsDto(updatePet(pet, HttpStatus.OK), PetDto.class);
+    }
+
+    /**
+     * Update pet.
+     *
+     * @param pet the pet
+     * @param status the status
+     * @return the validatable response
+     */
+    public ValidatableResponse updatePet(PetDto pet, HttpStatus status) {
+        RequestSpecification requestSpecification = buildRequestSpecification(ContentType.JSON, new HashMap<>());
+
+        return put(requestSpecification, PET_ENDPOINT, pet).statusCode(status.getCode());
     }
 
     private RequestSpecification buildRequestSpecification(ContentType contentType, Map<String, String> headers) {
@@ -108,6 +133,7 @@ public class PetEndpoint extends AbstractWebEndpoint {
             .log(LogDetail.ALL)
             .setContentType(contentType)
             .addFilter(new AllureRestAssured())
+            .addFilter(new ResponseLoggingFilter())
             .addHeaders(headers)
             .build();
     }

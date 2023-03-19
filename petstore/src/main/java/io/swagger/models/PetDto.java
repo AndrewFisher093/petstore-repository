@@ -11,7 +11,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 public class PetDto {
 
     @JsonProperty(value = "id", access = JsonProperty.Access.READ_WRITE)
-    private Integer id;
+    private Long id;
     @JsonProperty(value = "category", access = JsonProperty.Access.READ_WRITE)
     private CategoryTagDto category;
     @JsonProperty(value = "name", access = JsonProperty.Access.READ_WRITE)
@@ -23,11 +23,11 @@ public class PetDto {
     @JsonProperty(value = "status", access = JsonProperty.Access.READ_WRITE)
     private String status;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public PetDto setId(Integer id) {
+    public PetDto setId(Long id) {
         this.id = id;
         return this;
     }
@@ -114,7 +114,7 @@ public class PetDto {
 
     public static final class Builder {
 
-        private Integer id;
+        private Long id;
         private CategoryTagDto category;
         private String name;
         private List<String> photoUrls;
@@ -128,7 +128,7 @@ public class PetDto {
             return new Builder();
         }
 
-        public Builder withId(Integer id) {
+        public Builder withId(Long id) {
             this.id = id;
             return this;
         }
