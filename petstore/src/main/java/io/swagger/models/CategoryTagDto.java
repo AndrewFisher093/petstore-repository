@@ -10,15 +10,15 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 public class CategoryTagDto {
 
     @JsonProperty(value = "id", access = JsonProperty.Access.READ_WRITE)
-    private Integer id;
+    private Long id;
     @JsonProperty(value = "name", access = JsonProperty.Access.READ_WRITE)
     private String name;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public CategoryTagDto setId(Integer id) {
+    public CategoryTagDto setId(Long id) {
         this.id = id;
         return this;
     }
