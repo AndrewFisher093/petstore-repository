@@ -9,7 +9,7 @@
 * AssertJ - fluent assertions java library
 * Config - configuration library
 * Allure - test report tool
-* Jackson - JSON parser for Java 
+* Jackson_2 - JSON parser for Java 
 * javafaker - fake data creation library
 
 
