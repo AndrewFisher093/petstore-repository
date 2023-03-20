@@ -61,9 +61,9 @@ public class PetGenerator {
                 .withId(faker.number().randomNumber())
                 .withName(faker.name().name())
                 .withCategory(
-                    new CategoryTagDto().setId(faker.number().randomDigit()).setName(faker.name().title()))
+                    new CategoryTagDto().setId(faker.number().randomNumber()).setName(faker.name().title()))
                 .withTags(Collections.singletonList(
-                    new CategoryTagDto().setId(faker.number().randomDigit()).setName(faker.name().username())))
+                    new CategoryTagDto().setId(faker.number().randomNumber()).setName(faker.name().username())))
                 .withPhotoUrls(Collections.singletonList(faker.witcher().quote()))
                 .withStatus(PetStatus.AVAILABLE.getStatus())
                 .build();

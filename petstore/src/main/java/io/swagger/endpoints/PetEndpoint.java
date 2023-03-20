@@ -1,26 +1,36 @@
 package io.swagger.endpoints;
 
-import io.qameta.allure.restassured.AllureRestAssured;
-import io.restassured.builder.RequestSpecBuilder;
-import io.restassured.filter.log.LogDetail;
-import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.http.ContentType;
 import io.restassured.response.ValidatableResponse;
 import io.restassured.specification.RequestSpecification;
 import io.swagger.helpers.HttpStatus;
 import io.swagger.models.PetDto;
+import io.swagger.restclient.RestAssuredConfiguration;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * The PetEndpoint describes manipulation with Pet entity.
  */
-public class PetEndpoint extends AbstractWebEndpoint {
+public class PetEndpoint extends AuthorizationEndpoint {
 
     private static final String PET_ENDPOINT = "/pet";
     private static final String PET_ID = "/{petId}";
     private static final String FIND_BY_STATUS = "/findByStatus";
+    private final RequestSpecification requestSpecification;
+
+    public PetEndpoint() {
+        String token = login()
+            .authorizeWithQueryParams()
+            .retrieveBearerToken();
+
+        RestAssuredConfiguration.baseUriVersioned();
+
+        HashMap<String, String> headers = new HashMap<>();
+        headers.put("Authorization", "Bearer " + token);
+
+        this.requestSpecification = buildRequestSpecification(ContentType.JSON, headers);
+    }
 
     /**
      * Create pet.
@@ -40,9 +50,7 @@ public class PetEndpoint extends AbstractWebEndpoint {
      * @return the validatable response
      */
     public ValidatableResponse createPet(PetDto pet, HttpStatus status) {
-        RequestSpecification requestSpecification = buildRequestSpecification(ContentType.JSON, new HashMap<>());
-
-        return post(requestSpecification, PET_ENDPOINT, pet).statusCode(status.getCode());
+        return post(this.requestSpecification, PET_ENDPOINT, pet).statusCode(status.getCode());
     }
 
     /**
@@ -63,9 +71,7 @@ public class PetEndpoint extends AbstractWebEndpoint {
      * @return the pet by id
      */
     public ValidatableResponse getPetById(Long petId, HttpStatus status) {
-        var requestSpecification = buildRequestSpecification(ContentType.JSON, new HashMap<>());
-
-        return get(requestSpecification, PET_ENDPOINT + PET_ID, petId).statusCode(status.getCode());
+        return get(this.requestSpecification, PET_ENDPOINT + PET_ID, petId).statusCode(status.getCode());
     }
 
     /**
@@ -86,10 +92,9 @@ public class PetEndpoint extends AbstractWebEndpoint {
      * @return the pet by status
      */
     public ValidatableResponse getPetByStatus(String petStatus, HttpStatus status) {
-        var requestSpecification = buildRequestSpecification(ContentType.JSON, new HashMap<>());
-        requestSpecification.queryParam("status", petStatus);
+        this.requestSpecification.queryParam("status", petStatus);
 
-        return get(requestSpecification, PET_ENDPOINT + FIND_BY_STATUS).statusCode(status.getCode());
+        return get(this.requestSpecification, PET_ENDPOINT + FIND_BY_STATUS).statusCode(status.getCode());
     }
 
     /**
@@ -110,9 +115,7 @@ public class PetEndpoint extends AbstractWebEndpoint {
      * @return the validatable response
      */
     public ValidatableResponse deletePetById(Long petId) {
-        var requestSpecification = buildRequestSpecification(ContentType.JSON, new HashMap<>());
-
-        return delete(requestSpecification, PET_ENDPOINT + PET_ID, petId);
+        return delete(this.requestSpecification, PET_ENDPOINT + PET_ID, petId);
     }
 
     /**
@@ -133,18 +136,6 @@ public class PetEndpoint extends AbstractWebEndpoint {
      * @return the validatable response
      */
     public ValidatableResponse updatePet(PetDto pet, HttpStatus status) {
-        RequestSpecification requestSpecification = buildRequestSpecification(ContentType.JSON, new HashMap<>());
-
-        return put(requestSpecification, PET_ENDPOINT, pet).statusCode(status.getCode());
-    }
-
-    private RequestSpecification buildRequestSpecification(ContentType contentType, Map<String, String> headers) {
-        return new RequestSpecBuilder()
-            .log(LogDetail.ALL)
-            .setContentType(contentType)
-            .addFilter(new AllureRestAssured())
-            .addFilter(new ResponseLoggingFilter())
-            .addHeaders(headers)
-            .build();
+        return put(this.requestSpecification, PET_ENDPOINT, pet).statusCode(status.getCode());
     }
 }

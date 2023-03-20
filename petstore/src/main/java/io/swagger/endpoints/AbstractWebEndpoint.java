@@ -2,12 +2,16 @@ package io.swagger.endpoints;
 
 import static io.restassured.RestAssured.given;
 
+import io.qameta.allure.restassured.AllureRestAssured;
 import io.restassured.builder.RequestSpecBuilder;
+import io.restassured.filter.log.LogDetail;
+import io.restassured.filter.log.ResponseLoggingFilter;
+import io.restassured.http.ContentType;
 import io.restassured.mapper.ObjectMapperType;
 import io.restassured.response.ValidatableResponse;
 import io.restassured.specification.RequestSpecification;
-import io.swagger.restclient.RestAssuredConfiguration;
 import java.util.List;
+import java.util.Map;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -18,8 +22,21 @@ public class AbstractWebEndpoint {
 
     protected static final Logger LOGGER = LogManager.getLogger();
 
-    public AbstractWebEndpoint() {
-        RestAssuredConfiguration.instance();
+    /**
+     * Build request specification.
+     *
+     * @param contentType the content type
+     * @param headers the headers
+     * @return the request specification
+     */
+    protected RequestSpecification buildRequestSpecification(ContentType contentType, Map<String, String> headers) {
+        return new RequestSpecBuilder()
+            .log(LogDetail.ALL)
+            .setContentType(contentType)
+            .addFilter(new AllureRestAssured())
+            .addFilter(new ResponseLoggingFilter())
+            .addHeaders(headers)
+            .build();
     }
 
     /**
@@ -41,6 +58,27 @@ public class AbstractWebEndpoint {
         if (bodyPayload != null) {
             specBuilder.setBody(bodyPayload);
         }
+        return given()
+            .spec(specBuilder.build())
+            .when()
+            .post(path, pathParams)
+            .then();
+    }
+
+    /**
+     * Execute POST request.
+     *
+     * @param reqSpec the request specification
+     * @param path the path
+     * @param pathParams the path params
+     * @return the validatable response
+     */
+    public ValidatableResponse postWithoutBody(RequestSpecification reqSpec, String path, Object... pathParams) {
+        LOGGER.debug("Send POST request to url [{}]", path);
+
+        RequestSpecBuilder specBuilder = new RequestSpecBuilder();
+        specBuilder.addRequestSpecification(reqSpec);
+
         return given()
             .spec(specBuilder.build())
             .when()
