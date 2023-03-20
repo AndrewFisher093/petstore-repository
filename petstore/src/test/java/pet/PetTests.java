@@ -17,6 +17,7 @@ import org.junit.jupiter.api.Tags;
 import org.junit.jupiter.api.Test;
 
 @Feature("API: Pet endpoint")
+@DisplayName("Pet endpoint")
 public class PetTests {
 
     private PetGenerator petGenerator;
