@@ -1,0 +1,6 @@
+"Status","Start Time","Stop Time","Duration in ms","Parent Suite","Suite","Sub Suite","Test Class","Test Method","Name","Description"
+"passed","Tue Mar 21 11:25:02 GMT 2023","Tue Mar 21 11:25:04 GMT 2023","2701","","Pet endpoint","","pet.PetTests","testDeletePet","Verify ability to delete pet",""
+"passed","Tue Mar 21 11:24:58 GMT 2023","Tue Mar 21 11:25:02 GMT 2023","3141","","Pet endpoint","","pet.PetTests","testRetrievePetsByStatus","Verify ability to retrieve pets by status",""
+"passed","Tue Mar 21 11:24:50 GMT 2023","Tue Mar 21 11:24:58 GMT 2023","8391","","Pet endpoint","","pet.PetTests","testUpdatePet","Verify ability to update pet",""
+"passed","Tue Mar 21 11:25:06 GMT 2023","Tue Mar 21 11:25:08 GMT 2023","2246","","Pet endpoint","","pet.PetTests","testRetrievePet","Verify ability to retrieve pet",""
+"passed","Tue Mar 21 11:25:04 GMT 2023","Tue Mar 21 11:25:06 GMT 2023","1866","","Pet endpoint","","pet.PetTests","testCreatePet","Verify ability to create a new pet",""

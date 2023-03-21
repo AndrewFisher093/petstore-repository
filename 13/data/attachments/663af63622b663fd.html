@@ -1,0 +1,55 @@
+<div>POST to https://petstore.swagger.io/v2/pet</div>
+
+<h4>Body</h4>
+<div>
+    <pre class="preformated-text">
+{
+    &quot;id&quot;: 265,
+    &quot;category&quot;: {
+        &quot;id&quot;: 8390,
+        &quot;name&quot;: &quot;Future Data Architect&quot;
+    },
+    &quot;name&quot;: &quot;Terrell O&#39;Connell&quot;,
+    &quot;photoUrls&quot;: [
+        &quot;Hide the wenches, Witcher&#39;s coming!!&quot;
+    ],
+    &quot;tags&quot;: [
+        {
+            &quot;id&quot;: 995,
+            &quot;name&quot;: &quot;jeffry.little&quot;
+        }
+    ],
+    &quot;status&quot;: &quot;available&quot;
+}    </pre>
+</div>
+
+<h4>Headers</h4>
+<div>
+        <div>Authorization: Bearer 0c4f7ffb-3bbe-4f73-8bd4-b1400f24329c</div>
+        <div>Accept: */*</div>
+        <div>Content-Type: application/json</div>
+</div>
+
+
+
+<h4>Curl</h4>
+<div>
+curl -v -X POST &#39;https://petstore.swagger.io/v2/pet&#39; -H &#39;Authorization: Bearer 0c4f7ffb-3bbe-4f73-8bd4-b1400f24329c&#39; -H &#39;Accept: */*&#39; -H &#39;Content-Type: application/json&#39; -d &#39;{
+    &quot;id&quot;: 265,
+    &quot;category&quot;: {
+        &quot;id&quot;: 8390,
+        &quot;name&quot;: &quot;Future Data Architect&quot;
+    },
+    &quot;name&quot;: &quot;Terrell O&#39;Connell&quot;,
+    &quot;photoUrls&quot;: [
+        &quot;Hide the wenches, Witcher&#39;s coming!!&quot;
+    ],
+    &quot;tags&quot;: [
+        {
+            &quot;id&quot;: 995,
+            &quot;name&quot;: &quot;jeffry.little&quot;
+        }
+    ],
+    &quot;status&quot;: &quot;available&quot;
+}&#39;
+</div>
