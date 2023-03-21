@@ -21,6 +21,10 @@ jobs:
         cache: maven
     - name: Navigate to project folder
       run: cd /home/runner/work/petstore-repository/petstore-repository/petstore
+      
+    - name: list
+      run: ls -la
+      
     - name: Execute tests with Maven
       run: mvn clean test   
 
