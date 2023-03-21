@@ -20,4 +20,7 @@ jobs:
         distribution: 'temurin'
         cache: maven
     - name: Execute tests with Maven
-      run: cd petstore mvn clean test      
+      run: cd petstore 
+    - name: Execute tests with Maven
+      run: mvn clean test   
+
