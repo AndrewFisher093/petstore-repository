@@ -19,12 +19,9 @@ jobs:
         java-version: '11'
         distribution: 'temurin'
         cache: maven
-    - name: Navigate to project folder
-      run: cd /home/runner/work/petstore-repository/petstore-repository/petstore/petstore
-      
+
     - name: list
       run: ls -la
       
     - name: Execute tests with Maven
-      run: mvn clean test   
-
+      run: mvn clean test
