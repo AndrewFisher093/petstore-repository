@@ -20,7 +20,7 @@ jobs:
         distribution: 'temurin'
         cache: maven
     - name: Navigate to project folder
-      run: cd /home/runner/work/petstore-repository/petstore-repository/petstore
+      run: cd /home/runner/work/petstore-repository/petstore-repository/petstore/petstore
       
     - name: list
       run: ls -la
