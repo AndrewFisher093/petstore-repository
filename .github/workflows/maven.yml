@@ -19,9 +19,9 @@ jobs:
         java-version: '11'
         distribution: 'temurin'
         cache: maven
-
-    - name: list
-      run: ls -la
       
     - name: Execute tests with Maven
-      run: mvn clean test
+      run: mvn test -Dgroups=regression
+
+    - name: Create Allure report
+      run: allure serve
